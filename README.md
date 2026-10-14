@@ -8,8 +8,10 @@ This portfolio is a responsive single-page website built with HTML, CSS, and van
 - `style.css` – layout, design system, and responsive styling
 - `projects.js` – project data and category filters
 - `script.js` – navigation, validation, and EmailJS contact form logic
-- `assets/` – profile photo, CV PDF, and project artwork
+- `assets/` – profile photo and CV PDF; optional project screenshots can be added under `assets/projects/`
 - `assets/Gayani Iresha Weerasooriya Cv1.pdf` – downloadable CV
+
+The page is organized into six sections: Home, About Me, Skills, Projects, Education & Certifications, and Contact.
 
 ## Add or update a project
 
@@ -24,8 +26,9 @@ This portfolio is a responsive single-page website built with HTML, CSS, and van
    - `githubUrl` (optional)
    - `liveUrl` (optional)
    - `status`
-4. Place project images in `assets/projects/` and reference the relative path in `image`.
-5. Reload the page to see the new card appear automatically.
+      - `designNote` (optional, for verified design work related to a project)
+   4. Place project images in `assets/projects/` and reference the relative path in `image`.
+   5. Reload the page to see the new card appear automatically.
 
 ## Supported project categories
 
@@ -36,9 +39,11 @@ The filter buttons are controlled by `projectCategories` in `projects.js`. Curre
 - Web Development
 - AI
 
+Design tools and related UI/UX details should be added to the relevant project card where that work was part of the project. The current Mushroom Mate entry includes its verified Figma and draw.io interface modeling.
+
 ## EmailJS contact form setup
 
-The contact form is already wired for EmailJS and keeps the real recipient email in the email template payload. You still need to configure your own EmailJS account.
+The contact form is wired for EmailJS and includes input validation, a honeypot, a 30-second client-side rate limit, and Google reCAPTCHA. The form sends to the email address in its configured payload. You still need to ensure the EmailJS service/template and reCAPTCHA domain configuration are enabled for the deployed website.
 
 1. Sign up at https://www.emailjs.com/
 2. Create an Email Service and connect it to your Gmail or another supported provider.
@@ -50,13 +55,9 @@ The contact form is already wired for EmailJS and keeps the real recipient email
    - `message`
    - `recipient_email`
 5. Copy your service ID, template ID, and public key.
-6. Edit `script.js` and replace the placeholders:
-   - `YOUR_EMAILJS_SERVICE_ID`
-   - `YOUR_EMAILJS_TEMPLATE_ID`
-   - `YOUR_EMAILJS_PUBLIC_KEY`
-7. Save the file and test the form.
-
-The default configuration is intentionally left as placeholders so no private credentials are exposed in the public repository.
+6. Verify the service ID, template ID, public key, template variables, and recipient address in `script.js` and the EmailJS dashboard.
+7. Add the reCAPTCHA site key in `index.html` and configure its allowed domains in the Google reCAPTCHA console.
+8. Submit a test message and confirm it arrives in the recipient inbox.
 
 ## Test the site locally
 
@@ -72,10 +73,11 @@ Then test:
 - project filter buttons
 - CV download
 - contact form validation
-- EmailJS submission after real credentials are added
+- EmailJS submission and inbox delivery
 
 ## Notes
 
 - The portfolio uses verified information from the current CV and project documentation only.
-- LinkedIn is intentionally left as a placeholder until the real profile URL is provided.
+- The portfolio uses the actual GitHub and LinkedIn URLs provided for this profile.
 - If no live demo is available for a project, the button remains hidden automatically.
+- DSMS is not currently listed because no verified DSMS description, repository URL, screenshot, or source project details were present in the portfolio files.

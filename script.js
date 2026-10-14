@@ -2,11 +2,11 @@
 const EMAIL_CONFIG = {
   serviceId: 'service_zruidpy',
   templateId: 'template_wr18r7p',
-  publicKey: 'HrA1dgnBzRfFgGdhM'
+  publicKey: 'HrA1dgnBzRfFgGdhM',
 };
 
 const RATE_LIMIT_MS = 30000;
-const FORM_STATE_KEY = 'portfolio-contact-rate-limit';
+const FORM_STATE_KEY = '6LcvNO8tAAAAABMqDFYYSV2wO7DdTjR4pjcuC_6a';
 
 function setStatus(message, type = '') {
   const statusBox = document.getElementById('formStatus');

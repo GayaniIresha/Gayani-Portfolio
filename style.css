@@ -151,10 +151,6 @@ textarea {
   color: var(--heading);
 }
 
-.nav-cta {
-  margin-left: 0.4rem;
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -228,27 +224,6 @@ textarea {
   margin-top: 1.9rem;
 }
 
-.hero-metrics {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.hero-metrics li {
-  min-width: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  color: var(--muted);
-}
-
-.hero-metrics strong {
-  color: var(--heading);
-  font-size: 1.45rem;
-}
-
 .social-links {
   display: flex;
   flex-wrap: wrap;
@@ -260,12 +235,6 @@ textarea {
   color: var(--secondary);
   font-weight: 600;
   border-bottom: 1px solid rgba(110, 231, 249, 0.28);
-  padding-bottom: 0.15rem;
-}
-
-.link-placeholder {
-  color: var(--muted);
-  border-bottom: 1px solid rgba(181, 192, 217, 0.3);
   padding-bottom: 0.15rem;
 }
 
@@ -302,8 +271,7 @@ textarea {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2rem;
+  grid-template-columns: 1fr;
 }
 
 .about-copy {
@@ -311,43 +279,16 @@ textarea {
   gap: 1.4rem;
   color: var(--muted);
   font-size: 1.03rem;
+  max-width: 860px;
 }
 
-.about-highlights {
-  display: grid;
-  gap: 1rem;
-}
-
-.stat-card {
-  background: rgba(17, 24, 39, 0.8);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.4rem;
-  box-shadow: var(--shadow);
-}
-
-.stat-number {
-  display: block;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 800;
-  color: var(--heading);
-}
-
-.stat-label {
-  color: var(--muted);
-}
-
-.skills-grid,
-.design-grid,
-.certificate-grid {
+.skills-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.3rem;
 }
 
-.skill-card,
-.design-card,
-.certificate-card {
+.skill-card {
   background: rgba(17, 24, 39, 0.8);
   border-radius: var(--radius);
   border: 1px solid var(--line);
@@ -355,9 +296,7 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-.skill-card h3,
-.design-card h3,
-.certificate-card h3 {
+.skill-card h3 {
   color: var(--heading);
   margin-bottom: 0.9rem;
   font-size: 1.2rem;
@@ -526,30 +465,19 @@ textarea {
   margin-top: 1.25rem;
 }
 
-.design-art {
-  height: 160px;
-  border-radius: 16px;
-  margin-bottom: 1rem;
-  background-size: cover;
-  background-position: center;
-  border: 1px solid rgba(148, 163, 184, 0.15);
-}
-
-.design-art-one {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(30, 41, 59, 1));
-}
-
-.design-art-two {
-  background: linear-gradient(135deg, rgba(45, 212, 191, 0.7), rgba(14, 116, 144, 0.95));
-}
-
-.design-art-three {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.7), rgba(190, 24, 93, 0.8));
-}
-
 .timeline-list {
   display: grid;
   gap: 1.2rem;
+}
+
+.subsection-title {
+  color: var(--heading);
+  font-size: 1.35rem;
+  margin: 0 0 1rem;
+}
+
+.timeline-list + .subsection-title {
+  margin-top: 2.5rem;
 }
 
 .timeline-item {
@@ -580,15 +508,13 @@ textarea {
 }
 
 .timeline-content p,
-.timeline-content span,
-.certificate-card p,
-.certificate-card span {
+.timeline-content span {
   color: var(--muted);
 }
 
-.certificate-card {
-  display: grid;
-  gap: 0.5rem;
+.project-design-note {
+  color: var(--secondary) !important;
+  font-size: 0.9rem;
 }
 
 .contact-section {
@@ -736,6 +662,7 @@ textarea {
 
 .footer-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -763,16 +690,13 @@ textarea {
   .about-grid,
   .contact-layout,
   .skills-grid,
-  .design-grid,
-  .certificate-grid,
   .project-grid {
     grid-template-columns: 1fr;
   }
 
   .hero-copy,
   .hero-visual,
-  .about-copy,
-  .about-highlights {
+  .about-copy {
     width: 100%;
   }
 
@@ -807,11 +731,6 @@ textarea {
 
   .nav-menu.is-open {
     display: flex;
-  }
-
-  .nav-cta {
-    margin-left: 0;
-    width: 100%;
   }
 
   .timeline-item {

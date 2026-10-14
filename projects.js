@@ -19,7 +19,8 @@ const projectData = [
     image: '',
     githubUrl: 'https://github.com/GayaniIresha/mushroom-mate',
     liveUrl: '',
-    status: 'Academic Individual Project'
+    status: 'Academic Individual Project',
+    designNote: 'Interface modeling with Figma and draw.io.'
   },
   {
     title: 'Task Manager Web Application',
@@ -77,6 +78,7 @@ function renderProjects() {
               <span class="project-category">${project.category}</span>
             </div>
             <p>${project.description}</p>
+            ${project.designNote ? `<p class="project-design-note">${project.designNote}</p>` : ''}
             <div class="project-chips">${techBadges}</div>
             <div class="project-links">
               ${githubButton}
@@ -103,27 +105,29 @@ function setActiveFilter(category) {
   renderProjects();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    const filterContainer = document.getElementById('projectFilters');
+function initializeProjects() {
+  const filterContainer = document.getElementById('projectFilters');
 
-    if (filterContainer) {
-      filterContainer.innerHTML = '';
-      projectCategories.forEach((category) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'filter-btn';
-        if (category === 'All') button.classList.add('active');
-        button.dataset.filter = category;
-        button.setAttribute('aria-pressed', String(category === 'All'));
-        button.textContent = category;
-        button.addEventListener('click', () => setActiveFilter(category));
-        filterContainer.appendChild(button);
-      });
-    }
+  if (filterContainer) {
+    filterContainer.innerHTML = '';
+    projectCategories.forEach((category) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'filter-btn';
+      if (category === 'All') button.classList.add('active');
+      button.dataset.filter = category;
+      button.setAttribute('aria-pressed', String(category === 'All'));
+      button.textContent = category;
+      button.addEventListener('click', () => setActiveFilter(category));
+      filterContainer.appendChild(button);
+    });
+  }
 
-    renderProjects();
-  });
-} else {
   renderProjects();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeProjects);
+} else {
+  initializeProjects();
 }
