@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="projects.js" defer></script>
     <script src="script.js" defer></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -368,7 +369,15 @@
             <div class="honeypot" aria-hidden="true">
               <label for="website">Leave this blank</label>
               <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-            </div>
+            </div> 
+
+            <!-- Google reCAPTCHA -->
+<div class="field-group">
+  <div
+    class="g-recaptcha"
+    data-sitekey="6LcvNO8tAAAAABMqDFYYSV2wO7DdTjR4pjcuC_6a">
+  </div>
+</div>
 
             <button id="submitBtn" class="btn btn-primary form-btn" type="submit">Send Message</button>
             <p id="formStatus" class="form-status" aria-live="polite"></p>
