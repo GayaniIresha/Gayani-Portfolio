@@ -1,23 +1,29 @@
+
 const EMAIL_CONFIG = {
-  serviceId: 'YOUR_EMAILJS_SERVICE_ID',
-  templateId: 'YOUR_EMAILJS_TEMPLATE_ID',
-  publicKey: 'YOUR_EMAILJS_PUBLIC_KEY'
+  serviceId: 'service_zruidpy',
+  templateId: 'template_wr18r7p',
+  publicKey: 'HrA1dgnBzRfFgGdhM'
 };
 
 const RATE_LIMIT_MS = 30000;
 const FORM_STATE_KEY = 'portfolio-contact-rate-limit';
 
-function setStatus(message, type) {
+function setStatus(message, type = '') {
   const statusBox = document.getElementById('formStatus');
   if (!statusBox) return;
 
   statusBox.textContent = message;
   statusBox.classList.remove('success', 'error');
-  if (type) statusBox.classList.add(type);
+
+  if (type) {
+    statusBox.classList.add(type);
+  }
 }
 
 function setFieldError(input, message) {
-  const errorNode = input.parentElement.querySelector('.field-error');
+  const errorNode =
+    input.parentElement?.querySelector('.field-error');
+
   input.setAttribute('aria-invalid', message ? 'true' : 'false');
 
   if (errorNode) {
@@ -40,6 +46,7 @@ function validateField(input) {
 
   if (name === 'email') {
     const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
     if (!validEmail) {
       setFieldError(input, 'Please enter a valid email address.');
       return false;
@@ -52,12 +59,18 @@ function validateField(input) {
   }
 
   if (name === 'subject' && value.length < 3) {
-    setFieldError(input, 'Please enter a subject with at least 3 characters.');
+    setFieldError(
+      input,
+      'Please enter a subject with at least 3 characters.'
+    );
     return false;
   }
 
   if (name === 'message' && value.length < 10) {
-    setFieldError(input, 'Please write a message with at least 10 characters.');
+    setFieldError(
+      input,
+      'Please write a message with at least 10 characters.'
+    );
     return false;
   }
 
@@ -66,15 +79,20 @@ function validateField(input) {
 }
 
 function validateForm(form) {
-  const fields = ['name', 'email', 'subject', 'message'];
+  const fieldNames = ['name', 'email', 'subject', 'message'];
   let isValid = true;
 
-  fields.forEach((fieldName) => {
-    const field = form.elements[fieldName];
-    if (!field) return;
+  fieldNames.forEach((fieldName) => {
+    const field = form.elements.namedItem(fieldName);
 
-    const ok = validateField(field);
-    if (!ok) isValid = false;
+    if (!field) {
+      isValid = false;
+      return;
+    }
+
+    if (!validateField(field)) {
+      isValid = false;
+    }
   });
 
   return isValid;
@@ -82,26 +100,43 @@ function validateForm(form) {
 
 function isEmailConfigReady() {
   return Object.values(EMAIL_CONFIG).every((value) => {
-    if (typeof value !== 'string') return false;
-    return value.trim().length > 0 && !value.includes('YOUR_');
+    return (
+      typeof value === 'string' &&
+      value.trim().length > 0 &&
+      !value.includes('YOUR_')
+    );
   });
 }
 
 function canSendMessage() {
-  const lastStamp = Number(window.sessionStorage.getItem(FORM_STATE_KEY) || '0');
-  return Date.now() - lastStamp >= RATE_LIMIT_MS;
+  try {
+    const lastStamp = Number(
+      sessionStorage.getItem(FORM_STATE_KEY) || '0'
+    );
+
+    return Date.now() - lastStamp >= RATE_LIMIT_MS;
+  } catch {
+    return true;
+  }
 }
 
 function markMessageSent() {
-  window.sessionStorage.setItem(FORM_STATE_KEY, String(Date.now()));
+  try {
+    sessionStorage.setItem(FORM_STATE_KEY, String(Date.now()));
+  } catch {
+    // Sending should not fail if sessionStorage is unavailable.
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Update footer year.
   const yearNode = document.getElementById('year');
+
   if (yearNode) {
     yearNode.textContent = new Date().getFullYear();
   }
 
+  // Mobile navigation.
   const navToggle = document.querySelector('.nav-toggle');
   const navMenu = document.getElementById('navMenu');
 
@@ -119,10 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Contact form.
   const form = document.getElementById('contactForm');
+
   if (!form) return;
 
   const fields = form.querySelectorAll('input, textarea');
+
   fields.forEach((field) => {
     field.addEventListener('input', () => {
       validateField(field);
@@ -131,50 +169,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const honeypot = form.elements.website;
+
+    const honeypot = form.elements.namedItem('website');
+
     if (honeypot && honeypot.value.trim()) {
       setStatus('Your message could not be sent.', 'error');
       return;
     }
 
     if (!validateForm(form)) {
-      setStatus('Please correct the highlighted fields and try again.', 'error');
-      return;
-    }
-
-    if (!canSendMessage()) {
-      setStatus('Please wait a moment before sending another message.', 'error');
-      return;
-    }
-
-    const submitButton = form.querySelector('#submitBtn');
-    if (!submitButton) return;
-
-    if (!isEmailConfigReady()) {
-      submitButton.disabled = false;
       setStatus(
-        'The contact form is configured, but EmailJS credentials are still placeholders. Follow the setup steps in the README and replace the values in script.js before sending actual emails.',
+        'Please correct the highlighted fields and try again.',
         'error'
       );
       return;
     }
 
-    if (!window.emailjs || !window.emailjs.send) {
-      setStatus('The email service library is still loading. Please try again in a moment.', 'error');
+    // Check Google reCAPTCHA.
+    if (!window.grecaptcha?.getResponse) {
+      setStatus(
+        'reCAPTCHA is still loading. Please refresh and try again.',
+        'error'
+      );
+      return;
+    }
+
+    const captchaResponse = window.grecaptcha.getResponse();
+
+    if (!captchaResponse) {
+      setStatus(
+        'Please complete the reCAPTCHA verification.',
+        'error'
+      );
+      return;
+    }
+
+    if (!canSendMessage()) {
+      setStatus(
+        'Please wait 30 seconds before sending another message.',
+        'error'
+      );
+      return;
+    }
+
+    const submitButton = form.querySelector('#submitBtn');
+
+    if (!submitButton) return;
+
+    if (!isEmailConfigReady()) {
+      setStatus(
+        'Please add your EmailJS Public Key in script.js first.',
+        'error'
+      );
+      return;
+    }
+
+    if (!window.emailjs?.send) {
+      setStatus(
+        'EmailJS is still loading. Please try again shortly.',
+        'error'
+      );
       return;
     }
 
     submitButton.disabled = true;
     submitButton.textContent = 'Sending...';
-    setStatus('Sending your message...', '');
+    setStatus('Sending your message...');
 
     try {
       const payload = {
-        from_name: form.elements.name.value.trim(),
-        from_email: form.elements.email.value.trim(),
-        subject: form.elements.subject.value.trim(),
-        message: form.elements.message.value.trim(),
-        recipient_email: 'gayani02iresha@gmail.com'
+        from_name: form.elements.namedItem('name').value.trim(),
+        from_email: form.elements.namedItem('email').value.trim(),
+        subject: form.elements.namedItem('subject').value.trim(),
+        message: form.elements.namedItem('message').value.trim(),
+        recipient_email: 'gayani02iresha@gmail.com',
+        'g-recaptcha-response': captchaResponse
       };
 
       await window.emailjs.send(
@@ -186,14 +255,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
       markMessageSent();
       form.reset();
-      setStatus('Your message was sent successfully. Thank you for reaching out!', 'success');
-      submitButton.textContent = 'Send Message';
-      submitButton.disabled = false;
+
+      if (window.grecaptcha?.reset) {
+        window.grecaptcha.reset();
+      }
+
+      fields.forEach((field) => {
+        setFieldError(field, '');
+      });
+
+      setStatus(
+        'Your message was sent successfully. Thank you for reaching out!',
+        'success'
+      );
     } catch (error) {
       console.error('Email delivery failed:', error);
-      setStatus('Your message could not be sent at the moment. Please try again or email me directly at gayani02iresha@gmail.com.', 'error');
-      submitButton.textContent = 'Send Message';
+
+      if (window.grecaptcha?.reset) {
+        window.grecaptcha.reset();
+      }
+
+      setStatus(
+        'Your message could not be sent. Please try again or email gayani02iresha@gmail.com directly.',
+        'error'
+      );
+    } finally {
       submitButton.disabled = false;
+      submitButton.textContent = 'Send Message';
     }
   });
 });
